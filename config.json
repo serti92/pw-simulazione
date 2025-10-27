@@ -1,7 +1,9 @@
 {
   "global_settings": {
     "random_seed": 42,
-    "kg_per_q": 100
+    "kg_per_q": 100,
+    "n_iterazioni_montecarlo": 1000,
+    "cartella_output_csv": "output_csv"
   },
   "validaz_limiti": {
     "scarto_min": 0.0,
@@ -28,9 +30,9 @@
     }
   },
   "var_params": {
-    "capacita_sigma_percent": 0.0,
-    "costo_sigma_percent": 0.0,
-    "scarto_sigma_percent": 0.0
+    "capacita_sigma_percent": 0.05,
+    "costo_sigma_percent": 0.05,
+    "scarto_sigma_percent": 0.10
   },
   "scenari": {
     "Pessimistico": {
