@@ -2,8 +2,9 @@
 
 import simulazione
 import copy
+import json
 
-# --- MOCK CONFIG ---
+""""# --- MOCK CONFIG ---
 
 MOCK_CONFIG = {
     "global_settings": {
@@ -56,7 +57,7 @@ MOCK_CONFIG = {
 }
 
 
-# --- FINE MOCK CONFIG ---
+# --- FINE MOCK CONFIG --- """
 
 # --- FUNZIONI DI TEST DI VALIDAZIONE ---
 
@@ -166,37 +167,159 @@ def test_monotonia_scarto(lotti_generati, config, profitto_base):
         print("[FAIL] Aumentando lo scarto, il profitto o la quantità non sono diminuiti.")
 
 
+def test_sensitivita_prezzo(lotti_generati, config, profitto_base):
+    """Test 5: Verifica che aumentando il prezzo di vendita, il profitto aumenti."""
+    print("\n[Test 5] Validazione: Sensitività Prezzo (Manuale)...")
+
+    config_test = copy.deepcopy(config)
+
+    # Aumentiamo il prezzo del primo prodotto (Sangiovese)
+    prezzo_base = config_test['scenari']['Reale']['prodotti'][0]['prezzo_kg']
+    config_test['scenari']['Reale']['prodotti'][0]['prezzo_kg'] *= 2
+    print(
+        f"  Prezzo base (Sang.): {prezzo_base}, Prezzo test: {config_test['scenari']['Reale']['prodotti'][0]['prezzo_kg']}")
+
+    kpi_test_prezzo = simulazione.run_single_simulation(
+        generated_lots=lotti_generati,
+        config_scenario=config_test['scenari']['Reale'],
+        seq_chiave='manuale',
+        var_params=config_test['var_params'],
+        global_params=config_test
+    )
+    profitto_alto_prezzo = kpi_test_prezzo['profitto_netto']
+    print(f"  Profitto Base: {profitto_base:.2f} € | Profitto Alto Prezzo: {profitto_alto_prezzo:.2f} €")
+
+    if profitto_alto_prezzo > profitto_base:
+        print("[PASS] Aumentando il prezzo, il profitto è aumentato correttamente.")
+    else:
+        print("[FAIL] Aumentando il prezzo, il profitto NON è aumentato.")
+
+
+def test_zero_lotti(config):
+    """Test 6: Verifica che con lotti a zero, i KPI siano zero."""
+    print("\n[Test 6] Validazione: Lotti a 0...")
+
+    lotti_vuoti = {"Sangiovese": 0, "Trebbiano": 0, "Merlot": 0}
+
+    kpi_zero = simulazione.run_single_simulation(
+        generated_lots=lotti_vuoti,
+        config_scenario=config['scenari']['Reale'],
+        seq_chiave='manuale',
+        var_params=config['var_params'],
+        global_params=config
+    )
+
+    # Verifichiamo che i KPI principali siano 0
+    if kpi_zero['profitto_netto'] == 0 and kpi_zero['costo_tot'] == 0 and kpi_zero['giorni_arr'] == 0:
+        print("[PASS] Con lotti a zero, tutti i KPI principali sono 0.")
+    else:
+        print(f"[FAIL] Con lotti a zero, i KPI non sono corretti: {kpi_zero}")
+
+
+def test_val_errori(config):
+    """Test 7: Verifica che la funzione validate_config blocchi configurazioni errate."""
+    print("\n[Test 7] Validazione: Rilevamento Errori Config...")
+
+    test_superati = 0
+    num_test = 3  # Numero di sotto-test che faremo
+
+    # Test 7.1: Prezzo negativo
+    try:
+        config_test = copy.deepcopy(config)
+        config_test['scenari']['Reale']['prodotti'][0]['prezzo_kg'] = -10
+        simulazione.validate_config(config_test)
+        # Se arriviamo qui, il test è fallito perché non ha sollevato l'errore
+        print("[FAIL] validate_config non ha bloccato un prezzo negativo.")
+    except ValueError as e:
+        print("[PASS] validate_config ha bloccato correttamente un prezzo negativo.")
+        test_superati += 1
+    except Exception as e:
+        print(f"[FAIL] Errore inatteso nel test prezzo: {e}")
+
+    # Test 7.2: Scarto > 1
+    try:
+        config_test = copy.deepcopy(config)
+        config_test['scenari']['Reale']['manuale']['scarto_perc'] = 1.5  # Scarto al 150%
+        simulazione.validate_config(config_test)
+        print("[FAIL] validate_config non ha bloccato uno scarto > 1.")
+    except ValueError as e:
+        print("[PASS] validate_config ha bloccato correttamente uno scarto > 1.")
+        test_superati += 1
+    except Exception as e:
+        print(f"[FAIL] Errore inatteso nel test scarto: {e}")
+
+    # Test 7.3: Capacità negativa
+    try:
+        config_test = copy.deepcopy(config)
+        config_test['scenari']['Reale']['meccanica']['cap_q_gg'] = -100
+        simulazione.validate_config(config_test)
+        print("[FAIL] validate_config non ha bloccato una capacità negativa.")
+    except ValueError as e:
+        print("[PASS] validate_config ha bloccato correttamente una capacità negativa.")
+        test_superati += 1
+    except Exception as e:
+        print(f"[FAIL] Errore inatteso nel test capacità: {e}")
+
+    return test_superati == num_test
+
 # --- FUNZIONE PRINCIPALE DI TEST ---
 def main():
     """Funzione principale per eseguire tutti i test."""
 
     print("--- AVVIO TEST PER SIMULAZIONE.PY ---")
 
+    # Carica il file JSON
+    try:
+        with open('config.json', 'r') as f:
+            CONFIG_JSON = json.load(f)
+        print("[Info] File 'config.json' caricato con successo.")
+    except FileNotFoundError:
+        print("[FAIL] File 'config.json' non trovato. Assicurati che sia nella stessa cartella.")
+        return
+    except json.JSONDecodeError:
+        print("[FAIL] Errore nella lettura del JSON. Controlla la sintassi del file.")
+        return
+
+    # Cerca kg_per_q in global_settings e al primo livello.
+    if 'global_settings' in CONFIG_JSON and 'kg_per_q' in CONFIG_JSON['global_settings']:
+        CONFIG_JSON['kg_per_q'] = CONFIG_JSON['global_settings']['kg_per_q']
+
     # Blocco per catturare errori di validazione
     try:
         # Per prima cosa, testiamo che la validazione funzioni
         print("\n[Test 0] Validazione Configurazione Iniziale...")
-        simulazione.validate_config(MOCK_CONFIG)
-        print("[PASS] La configurazione MOCK è stata validata.")
+        simulazione.validate_config(CONFIG_JSON)
+        print("[PASS] La configurazione JSON è stata validata.")
     except ValueError as e:
         print(f"[FAIL] Validazione fallita: {e}")
         return  # Esce se la config base non è valida
 
+    # Test: Testiamo che la validazione blocchi i dati errati
+    if not test_val_errori(CONFIG_JSON):
+        print("\nTest falliti (Validazione Errori). Uscita.")
+        return
+
     # Test 1: Determinismo
-    lotti = test_seed(MOCK_CONFIG)
+    lotti = test_seed(CONFIG_JSON)
 
     if lotti is None:
         print("\nTest falliti (Seed). Uscita.")
         return
 
     # Test 2: Simulazione Base
-    profitto_base_man = test_simulazione_base(lotti, MOCK_CONFIG)
+    profitto_base_man = test_simulazione_base(lotti, CONFIG_JSON)
 
     # Test 3: Sensitività Costo
-    test_sensitivita_costo(lotti, MOCK_CONFIG, profitto_base_man)
+    test_sensitivita_costo(lotti, CONFIG_JSON, profitto_base_man)
 
     # Test 4: Monotonia Scarto
-    test_monotonia_scarto(lotti, MOCK_CONFIG, profitto_base_man)
+    test_monotonia_scarto(lotti, CONFIG_JSON, profitto_base_man)
+
+    # Test 5: Sensitività Prezzo
+    test_sensitivita_prezzo(lotti, CONFIG_JSON, profitto_base_man)
+
+    # Test 6: Edge Case Lotti a Zero
+    test_zero_lotti(CONFIG_JSON)
 
     print("\n--- TEST COMPLETATI ---")
 

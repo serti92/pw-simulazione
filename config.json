@@ -1,0 +1,88 @@
+{
+  "global_settings": {
+    "random_seed": 42,
+    "kg_per_q": 100
+  },
+  "validaz_limiti": {
+    "scarto_min": 0.0,
+    "scarto_max": 0.20,
+    "capacita_min_q_g": 10,
+    "capacita_max_q_g": 1000,
+    "costo_min_euro_g": 50,
+    "costo_max_euro_g": 5000
+  },
+  "par_gen_lotti": {
+    "modalita": "resa_ettaro",
+    "resa_ettaro": {
+      "superficie_ha": {
+        "Sangiovese": 6,
+        "Trebbiano": 4,
+        "Merlot": 3
+      },
+      "resa_q_ha_media": {
+        "Sangiovese": 85,
+        "Trebbiano": 78,
+        "Merlot": 82
+      },
+      "resa_sigma_percent": 0.10
+    }
+  },
+  "var_params": {
+    "capacita_sigma_percent": 0.0,
+    "costo_sigma_percent": 0.0,
+    "scarto_sigma_percent": 0.0
+  },
+  "scenari": {
+    "Pessimistico": {
+      "prodotti": [
+        { "nome": "Sangiovese", "prezzo_kg": 0.80 },
+        { "nome": "Trebbiano", "prezzo_kg": 0.60 },
+        { "nome": "Merlot", "prezzo_kg": 0.70 }
+      ],
+      "manuale": {
+        "cap_q_gg": 90,
+        "costo_euro_gg": 600,
+        "scarto_perc": 0.03
+      },
+      "meccanica": {
+        "cap_q_gg": 250,
+        "costo_euro_gg": 700,
+        "scarto_perc": 0.05
+      }
+    },
+    "Reale": {
+      "prodotti": [
+        { "nome": "Sangiovese", "prezzo_kg": 1.10 },
+        { "nome": "Trebbiano", "prezzo_kg": 0.80 },
+        { "nome": "Merlot", "prezzo_kg": 0.90 }
+      ],
+      "manuale": {
+        "cap_q_gg": 100,
+        "costo_euro_gg": 550,
+        "scarto_perc": 0.02
+      },
+      "meccanica": {
+        "cap_q_gg": 280,
+        "costo_euro_gg": 600,
+        "scarto_perc": 0.045
+      }
+    },
+    "Ottimistico": {
+      "prodotti": [
+        { "nome": "Sangiovese", "prezzo_kg": 1.30 },
+        { "nome": "Trebbiano", "prezzo_kg": 1.00 },
+        { "nome": "Merlot", "prezzo_kg": 1.10 }
+      ],
+      "manuale": {
+        "cap_q_gg": 110,
+        "costo_euro_gg": 500,
+        "scarto_perc": 0.015
+      },
+      "meccanica": {
+        "cap_q_gg": 300,
+        "costo_euro_gg": 580,
+        "scarto_perc": 0.04
+      }
+    }
+  }
+}
