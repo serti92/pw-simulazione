@@ -2,7 +2,6 @@ import json
 import simulazione
 import pandas as pd
 import numpy as np
-import copy
 import os
 from datetime import datetime
 
@@ -29,11 +28,8 @@ def carica_config(config_path='config.json') -> dict:
         print(f"ERRORE: Configurazione non valida. Dettagli: {e}")
         raise
 
-
 def run_montecarlo(config: dict, n_iter: int) -> pd.DataFrame:
-    """
-    Esegue la simulazione Monte Carlo per tutti gli scenari e sequenze.
-    """
+    """Esegue la simulazione Monte Carlo per tutti gli scenari e sequenze."""
     print(f"\n--- AVVIO SIMULAZIONE MONTE CARLO ({n_iter} iterazioni) ---")
 
     # Lista per conservare tutti i risultati
@@ -76,36 +72,31 @@ def run_montecarlo(config: dict, n_iter: int) -> pd.DataFrame:
                     'ricavo_tot': kpi['ricavo_tot'],
                     'giorni_arr': kpi['giorni_arr'],
                     'giorni_continui': kpi['giorni_continui'],
-                    'qt_netta_q': kpi['qt_netta_q']
+                    'qt_netta_q': kpi['qt_netta_q'],
+                    **kpi
                 })
 
-    print("Simulazione Monte Carlo completata.")
-    # Converte la lista di risultati in un DataFrame Pandas
+    print(f"Simulazione Monte Carlo completata ({n_iter} iterazioni).")    # Converte la lista di risultati in un DataFrame Pandas
     return pd.DataFrame(risultati)
 
 
-def analizza_risultati(df_risultati: pd.DataFrame):
-    """
-    Stampa un'analisi dei risultati aggregati.
-    """
+def analizza_risultati(df_risultati: pd.DataFrame) -> (pd.DataFrame, pd.DataFrame):
+    """Calcola le statistiche e restituisce un DataFrame grezzo e uno formattato."""
     print("\n--- ANALISI STATISTICA DEI RISULTATI ---")
 
-    # Modifica per NOTA 4: Aggrega anche costo_tot e giorni_arr
     summary = df_risultati.groupby(['scenario', 'sequenza']).agg(
         # Aggregazioni per Profitto
         profitto_media=('profitto_netto', 'mean'),
         profitto_std=('profitto_netto', 'std'),
         profitto_p05=('profitto_netto', lambda x: np.percentile(x, 5)),
         profitto_p95=('profitto_netto', lambda x: np.percentile(x, 95)),
-
-        # Aggregazioni per Costo e Giorni (NOTA 4)
         costo_media=('costo_tot', 'mean'),
         giorni_media=('giorni_arr', 'mean')
     ).reset_index()
 
     pd.options.display.float_format = '{:,.2f}'.format
 
-    # Modifica per NOTA 3: Rinomina colonne per leggibilità e unità
+    #Rinomina colonne per leggibilità e unità
     summary_print = summary.rename(columns={
         'scenario': 'Scenario',
         'sequenza': 'Sequenza',
@@ -118,68 +109,28 @@ def analizza_risultati(df_risultati: pd.DataFrame):
     })
 
     print(summary_print.to_string(index=False))
-
-    # Restituisce il summary con i nomi originali (più facili da processare)
+    # Restituisce il summary con i nomi originali per facilità processazione
     return summary, summary_print
 
-def salva_risultati_raw(df_risultati: pd.DataFrame, cartella_output: str = "output_csv"):
-    """
-    Salva il DataFrame dei risultati grezzi in un CSV con timestamp.
-    """
+def salva_risultati(df_risultati: pd.DataFrame, summary_print_df: pd.DataFrame, cartella_output: str) -> tuple[str, str]:
+    """Salva sia i risultati grezzi che il sommario, restituendo i percorsi dei file."""
     print(f"\nSalvataggio risultati in '{cartella_output}'...")
+    os.makedirs(cartella_output, exist_ok=True)
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    path_raw, path_summary = None, None
+
     try:
-        # 2. Crea la cartella se non esiste
-        os.makedirs(cartella_output, exist_ok=True)
-
-        # 3. Genera timestamp
-        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-
-        # 4. Crea il nome del file
-        nome_file = f"run_montecarlo_{timestamp}.csv"
-        percorso_file = os.path.join(cartella_output, nome_file)
-
-        # 5. Salva il file
-        df_risultati.to_csv(percorso_file, index=False, sep=';', decimal='.')
-        print(f"[SUCCESS] Risultati grezzi salvati in: {percorso_file}")
-
+        path_raw = os.path.join(cartella_output, f"run_montecarlo_{timestamp}.csv")
+        df_risultati.to_csv(path_raw, index=False, sep=';', decimal='.')
+        print(f"[SUCCESS] Risultati grezzi salvati in: {path_raw}")
     except Exception as e:
-        print(f"[FAIL] Errore durante il salvataggio del file CSV: {e}")
+        print(f"[FAIL] Errore durante il salvataggio dei dati grezzi: {e}")
 
-
-def salva_summary_csv(summary_df: pd.DataFrame, cartella_output: str):
-    """
-    Salva il DataFrame aggregato in un file CSV con timestamp.
-    """
-    print(f"\nSalvataggio SUMMARY (statistiche) in '{cartella_output}'...")
     try:
-        os.makedirs(cartella_output, exist_ok=True)
-        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-
-        nome_file = f"run_summary_{timestamp}.csv"
-        percorso_file = os.path.join(cartella_output, nome_file)
-
-        # Salva in CSV
-        summary_df.to_csv(percorso_file, index=False, sep=';', decimal='.')
-
-        print(f"[SUCCESS] Summary CSV salvato in: {percorso_file}")
+        path_summary = os.path.join(cartella_output, f"run_summary_{timestamp}.csv")
+        summary_print_df.to_csv(path_summary, index=False, sep=';', decimal='.')
+        print(f"[SUCCESS] Summary CSV salvato in: {path_summary}")
     except Exception as e:
-        print(f"[FAIL] Errore duringo il salvataggio del summary CSV: {e}")
+        print(f"[FAIL] Errore durante il salvataggio del summary: {e}")
 
-
-# --- Esecuzione Principale ---
-if __name__ == "__main__":
-    try:
-        configurazione = carica_config()
-
-        settings = configurazione.get('global_settings', {})
-        N_ITERAZIONI = settings.get('n_iterazioni_montecarlo', 1000)
-        CARTELLA_OUTPUT = settings.get('cartella_output_csv', 'output_csv_default')  # 'output_csv_default' come fallback
-
-        df_risultati = run_montecarlo(configurazione, N_ITERAZIONI)
-        summary_df, summary_print = analizza_risultati(df_risultati)
-
-        salva_risultati_raw(df_risultati, CARTELLA_OUTPUT)
-        salva_summary_csv(summary_print, CARTELLA_OUTPUT)
-
-    except Exception as e:
-        print(f"\nSimulazione interrotta a causa di un errore: {e}")
+    return path_raw, path_summary
