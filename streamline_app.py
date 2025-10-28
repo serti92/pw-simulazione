@@ -263,7 +263,7 @@ elif pagina_selezionata == "Configurazione":
             settings['random_seed'] = st.number_input(
                 "Random Seed",
                 value=int(settings.get('random_seed', 42)),
-                disabled=True  
+                disabled=True
             )
             settings['n_iterazioni_montecarlo'] = st.number_input(
                 "N° Iterazioni Monte Carlo",
@@ -371,13 +371,13 @@ elif pagina_selezionata == "Configurazione":
             for i, prod in enumerate(prodotti):
                 with cols[i]:
                     st.markdown(f"**{prod}**")
-                            superfici[prod] = st.number_input(
+                    superfici[prod] = st.number_input(
                         f"Superficie (ha)",
                         value=float(superfici.get(prod, 0)),
                         disabled=False,
                         key=f"lotti_sup_{prod}"
                     )
-                            rese[prod] = st.number_input(
+                    rese[prod] = st.number_input(
                         f"Resa (q/ha) Media",
                         value=float(rese.get(prod, 0)),
                         disabled=False,
@@ -386,7 +386,7 @@ elif pagina_selezionata == "Configurazione":
         else:
             st.warning("Nessun prodotto definito in 'par_gen_lotti.resa_ettaro'.")
 
-    # --- Tab 4: Parametri Varianza  ---
+# --- Tab 4: Parametri Varianza  ---
     with tab_var:
         st.subheader("Parametri Varianza (Monte Carlo)")
         var_params = config_in_editing.get('var_params', {})
@@ -444,7 +444,7 @@ elif pagina_selezionata == "Configurazione":
                         for j, prod_info in enumerate(prodotti_scenario):
                             with cols_prod[j]:
                                 nome_prod = prod_info.get('nome', 'N/D')
-                                 # Modifichiamo direttamente l'elemento nella lista
+                                # Modifichiamo direttamente l'elemento nella lista
                                 prodotti_scenario[j]['prezzo_kg'] = st.number_input(
                                     f"Prezzo (€/kg) - {nome_prod}",
                                     value=float(prod_info.get('prezzo_kg', 0)),
@@ -459,53 +459,53 @@ elif pagina_selezionata == "Configurazione":
                     with col_man:
                         st.markdown("**Manuale**")
                         man = scenario.get('manuale', {})
-                                    man['cap_q_gg'] = st.number_input(
+                        man['cap_q_gg'] = st.number_input(
                             f"Capacità (q/gg)",
                             value=float(man.get('cap_q_gg', 0)),
                             disabled=False,
                             key=f"vis_{nome_scenario}_man_cap"
                         )
-                                    man['costo_euro_gg'] = st.number_input(
+                        man['costo_euro_gg'] = st.number_input(
                             f"Costo (€/gg)",
                             value=float(man.get('costo_euro_gg', 0)),
                             format="%.0f",
                             disabled=False,
                             key=f"vis_{nome_scenario}_man_costo"
                         )
-                                    man['scarto_perc'] = st.number_input(
+                        man['scarto_perc'] = st.number_input(
                             f"Scarto (%)",
                             value=float(man.get('scarto_perc', 0)),
                             format="%.2f",
                             disabled=False,
                             key=f"vis_{nome_scenario}_man_scarto",
-                            min_value=0.0, 
-                            max_value=1.0 
+                            min_value=0.0,
+                            max_value=1.0
                         )
-                    with col_mec:
-                        st.markdown("**Meccanica**")
-                        mec = scenario.get('meccanica', {})
-                                    mec['cap_q_gg'] = st.number_input(
-                            f"Capacità (q/gg)",
-                            value=float(mec.get('cap_q_gg', 0)),
-                            disabled=False,
-                            key=f"vis_{nome_scenario}_mec_cap"
-                        )
-                                    mec['costo_euro_gg'] = st.number_input(
-                            f"Costo (€/gg)",
-                            value=float(mec.get('costo_euro_gg', 0)),
-                            format="%.0f",
-                            disabled=False,
-                            key=f"vis_{nome_scenario}_mec_costo"
-                        )
-                                    mec['scarto_perc'] = st.number_input(
-                            f"Scarto (%)",
-                            value=float(mec.get('scarto_perc', 0)),
-                            format="%.2f",
-                            disabled=False,
-                            key=f"vis_{nome_scenario}_mec_scarto",
-                            min_value=0.0, 
-                            max_value=1.0 
-                        )
+                with col_mec:
+                    st.markdown("**Meccanica**")
+                    mec = scenario.get('meccanica', {})
+                    mec['cap_q_gg'] = st.number_input(
+                        f"Capacità (q/gg)",
+                        value=float(mec.get('cap_q_gg', 0)),
+                        disabled=False,
+                        key=f"vis_{nome_scenario}_mec_cap"
+                    )
+                    mec['costo_euro_gg'] = st.number_input(
+                        f"Costo (€/gg)",
+                        value=float(mec.get('costo_euro_gg', 0)),
+                        format="%.0f",
+                        disabled=False,
+                        key=f"vis_{nome_scenario}_mec_costo"
+                    )
+                    mec['scarto_perc'] = st.number_input(
+                        f"Scarto (%)",
+                        value=float(mec.get('scarto_perc', 0)),
+                        format="%.2f",
+                        disabled=False,
+                        key=f"vis_{nome_scenario}_mec_scarto",
+                        min_value=0.0,
+                        max_value=1.0
+                    )
 
     st.divider()
 
