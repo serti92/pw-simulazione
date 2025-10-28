@@ -13,7 +13,9 @@ st.set_page_config(
 )
 
 st.title("🍇 Simulatore di Vendemmia - Tenuta Pegaso")
-st.markdown("Strumento di supporto decisionale per l'analisi di scenario e rischio.")
+st.markdown('''Strumento di supporto decisionale per l'analisi di scenario e rischio.  
+⬅️ Apri il menù per le altre funzionalità''')
+
 
 
 # Carica la configurazione usando la cache di Streamlit per efficienza
