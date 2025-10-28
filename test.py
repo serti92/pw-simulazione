@@ -23,8 +23,8 @@ MOCK_CONFIG = {
     "par_gen_lotti": {
         "modalita": "resa_ettaro",
         "resa_ettaro": {
-            "superficie_ha": {"Sangiovese": 6, "Trebbiano": 4, "Merlot": 3},
-            "resa_q_ha_media": {"Sangiovese": 85, "Trebbiano": 78, "Merlot": 82},
+            "superficie_ha": {"Sangiovese": 6, "Trebbiano": 4, "Lambrusco": 3},
+            "resa_q_ha_media": {"Sangiovese": 85, "Trebbiano": 78, "Lambrusco": 82},
             "resa_sigma_percent": 0.10
         }
     },
@@ -40,7 +40,7 @@ MOCK_CONFIG = {
             "prodotti": [
                 {"nome": "Sangiovese", "prezzo_kg": 1.10},
                 {"nome": "Trebbiano", "prezzo_kg": 0.80},
-                {"nome": "Merlot", "prezzo_kg": 0.90}
+                {"nome": "Lambrusco", "prezzo_kg": 0.90}
             ],
             "manuale": {
                 "cap_q_gg": 100,
@@ -199,7 +199,7 @@ def test_zero_lotti(config):
     """Test 6: Verifica che con lotti a zero, i KPI siano zero."""
     print("\n[Test 6] Validazione: Lotti a 0...")
 
-    lotti_vuoti = {"Sangiovese": 0, "Trebbiano": 0, "Merlot": 0}
+    lotti_vuoti = {"Sangiovese": 0, "Trebbiano": 0, "Lambrusco": 0}
 
     kpi_zero = simulazione.run_single_simulation(
         generated_lots=lotti_vuoti,

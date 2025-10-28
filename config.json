@@ -19,14 +19,14 @@
       "superficie_ha": {
         "Sangiovese": 6.0,
         "Trebbiano": 4.0,
-        "Merlot": 3.0
+        "Lambrusco": 3.0
       },
       "resa_q_ha_media": {
-        "Sangiovese": 85.0,
-        "Trebbiano": 78.0,
-        "Merlot": 82.0
+        "Sangiovese": 90.0,
+        "Trebbiano": 120.0,
+        "Lambrusco": 150.0
       },
-      "resa_sigma_percent": 0.1
+      "resa_sigma_percent": 0.15
     }
   },
   "var_params": {
@@ -39,51 +39,51 @@
       "prodotti": [
         {
           "nome": "Sangiovese",
-          "prezzo_kg": 0.8
+          "prezzo_kg": 0.4
         },
         {
           "nome": "Trebbiano",
-          "prezzo_kg": 0.6
+          "prezzo_kg": 0.33
         },
         {
-          "nome": "Merlot",
-          "prezzo_kg": 0.7
+          "nome": "Lambrusco",
+          "prezzo_kg": 0.35
         }
       ],
       "manuale": {
         "cap_q_gg": 90.0,
-        "costo_euro_gg": 600.0,
+        "costo_euro_gg": 1296.0,
         "scarto_perc": 0.03
       },
       "meccanica": {
         "cap_q_gg": 250.0,
-        "costo_euro_gg": 700.0,
-        "scarto_perc": 0.05
+        "costo_euro_gg": 1040.0,
+        "scarto_perc": 0.06
       }
     },
     "Reale": {
       "prodotti": [
         {
           "nome": "Sangiovese",
-          "prezzo_kg": 1.1
+          "prezzo_kg": 0.55
         },
         {
           "nome": "Trebbiano",
-          "prezzo_kg": 0.8
+          "prezzo_kg": 0.4
         },
         {
-          "nome": "Merlot",
-          "prezzo_kg": 0.9
+          "nome": "Lambrusco",
+          "prezzo_kg": 0.45
         }
       ],
       "manuale": {
         "cap_q_gg": 100.0,
-        "costo_euro_gg": 550.0,
+        "costo_euro_gg": 1080.0,
         "scarto_perc": 0.02
       },
       "meccanica": {
         "cap_q_gg": 280.0,
-        "costo_euro_gg": 600.0,
+        "costo_euro_gg": 960.0,
         "scarto_perc": 0.045
       }
     },
@@ -91,27 +91,27 @@
       "prodotti": [
         {
           "nome": "Sangiovese",
-          "prezzo_kg": 1.3
+          "prezzo_kg": 0.7
         },
         {
           "nome": "Trebbiano",
-          "prezzo_kg": 1.0
+          "prezzo_kg": 0.5
         },
         {
-          "nome": "Merlot",
-          "prezzo_kg": 1.1
+          "nome": "Lambrusco",
+          "prezzo_kg": 0.55
         }
       ],
       "manuale": {
         "cap_q_gg": 110.0,
-        "costo_euro_gg": 500.0,
+        "costo_euro_gg": 900.0,
         "scarto_perc": 0.015
       },
       "meccanica": {
         "cap_q_gg": 300.0,
-        "costo_euro_gg": 580.0,
-        "scarto_perc": 0.04
+        "costo_euro_gg": 880.0,
+        "scarto_perc": 0.03
       }
     }
-  }
+  },
 }
