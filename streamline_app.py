@@ -123,14 +123,23 @@ elif pagina_selezionata == "Simulatore What-If":
         index=nomi_scenari.index('Reale')
     )
     if 'whatif_scenario_corrente' not in st.session_state or st.session_state.whatif_scenario_corrente != scenario_base_nome:
+
+        #Cancella i valori vecchi dei widget dallo stato della sessione per evitare che ci siano disallineamento con JSON
+        for key in list(st.session_state.keys()):
+            if key.startswith("whatif_"):
+                del st.session_state[key]
+
         st.session_state.whatif_scenario_corrente = scenario_base_nome
         scenario_default = CONFIG['scenari'][scenario_base_nome]
         gen_params_default = CONFIG['par_gen_lotti']['resa_ettaro']
+
         for prod in gen_params_default['superficie_ha']:
             st.session_state[f"whatif_sup_{prod}"] = float(gen_params_default['superficie_ha'][prod])
             st.session_state[f"whatif_resa_{prod}"] = float(gen_params_default['resa_q_ha_media'][prod])
+
         for prod_info in scenario_default['prodotti']:
             st.session_state[f"whatif_prezzo_{prod_info['nome']}"] = float(prod_info['prezzo_kg'])
+
         for seq_key in ['manuale', 'meccanica']:
             seq_params = scenario_default[seq_key]
             st.session_state[f"whatif_cap_{seq_key}"] = float(seq_params['cap_q_gg'])
