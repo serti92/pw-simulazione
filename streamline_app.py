@@ -94,7 +94,7 @@ if pagina_selezionata == "Confronto Scenari":
         st.subheader("Download Risultati")
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
-        col_dl1, col_dl2 = st.columns(2)
+        col_dl1, col_dl2,_ = st.columns([0.2,0.2,0.6])
         with col_dl1:
             st.download_button(
                 label="📥 Scarica Dati RAW",
