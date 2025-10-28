@@ -7,6 +7,7 @@ Questo progetto è uno **strumento di supporto decisionale (Decision Support Sys
 L'applicazione utilizza una **simulazione Monte Carlo** per modellare l'incertezza in variabili chiave (come resa, costi e scarti), fornendo una visione statistica dei possibili risultati (profitto, costi totali, durata della vendemmia).
 
 L'interfaccia utente è costruita con **Streamlit**, rendendo l'analisi complessa accessibile tramite un'applicazione web interattiva.
+
 Link pubblicazione app web: https://pw-simulazione.streamlit.app/
 
 ---
