@@ -36,9 +36,7 @@ except Exception as e:
 st.sidebar.header("Menu di Navigazione")
 pagina_selezionata = st.sidebar.radio(
     "Seleziona una funzionalità",
-    # --- [CORREZIONE PROBLEMA 2] Aggiunta Pagina Configurazione ---
     ("Confronto Scenari", "Simulatore What-If", "Configurazione"),
-    # --- Fine Correzione ---
     key="menu_principale"
 )
 st.sidebar.markdown("---")
@@ -236,7 +234,7 @@ elif pagina_selezionata == "Configurazione":
     # --- LOGICA DI CARICAMENTO IN SESSION_STATE ---
     try:
         with open('config.json', 'r', encoding='utf-8') as f:
-            # Questo è lo stato "prima" delle modifiche
+            # Stato prima delle modifiche
             config_da_modificare = json.load(f)
     except Exception as e:
         st.error(f"Impossibile leggere config.json: {e}")
@@ -256,7 +254,7 @@ elif pagina_selezionata == "Configurazione":
         "Scenari"
     ])
 
-    # --- Tab 1: Global Settings (Corretto) ---
+    # --- Tab 1: Global Settings  ---
     with tab_global:
         st.subheader("Impostazioni Globali")
         settings = config_in_editing.get('global_settings', {})
@@ -265,7 +263,7 @@ elif pagina_selezionata == "Configurazione":
             settings['random_seed'] = st.number_input(
                 "Random Seed",
                 value=int(settings.get('random_seed', 42)),
-                disabled=True  # Come da tuo codice
+                disabled=True  
             )
             settings['n_iterazioni_montecarlo'] = st.number_input(
                 "N° Iterazioni Monte Carlo",
@@ -284,14 +282,13 @@ elif pagina_selezionata == "Configurazione":
                 disabled=False
             )
 
-    # --- Tab 2: Limiti Validazione (ORA CORRETTO) ---
+    # --- Tab 2: Limiti Validazione  ---
     with tab_limiti:
         st.subheader("Limiti di Validazione")
         limiti = config_in_editing.get('validaz_limiti', {})
         col1, col2, col3 = st.columns(3)
         with col1:
             st.markdown("##### Scarto")
-            # --- AGGIUNTA ASSEGNAZIONE ---
             limiti['scarto_min'] = st.number_input(
                 "Scarto Min (%)",
                 value=float(limiti.get('scarto_min', 0.0)),
@@ -301,7 +298,6 @@ elif pagina_selezionata == "Configurazione":
                 min_value=0.0,
                 max_value=1.0
             )
-            # --- AGGIUNTA ASSEGNAZIONE ---
             limiti['scarto_max'] = st.number_input(
                 "Scarto Max (%)",
                 value=float(limiti.get('scarto_max', 0.0)),
@@ -313,14 +309,12 @@ elif pagina_selezionata == "Configurazione":
             )
         with col2:
             st.markdown("##### Capacità")
-            # --- AGGIUNTA ASSEGNAZIONE ---
             limiti['capacita_min_q_g'] = st.number_input(
                 "Capacità Min (q/g)",
                 value=int(limiti.get('capacita_min_q_g', 0)),
                 disabled=False,
                 key="lim_cap_min"
             )
-            # --- AGGIUNTA ASSEGNAZIONE ---
             limiti['capacita_max_q_g'] = st.number_input(
                 "Capacità Max (q/g)",
                 value=int(limiti.get('capacita_max_q_g', 0)),
@@ -329,7 +323,6 @@ elif pagina_selezionata == "Configurazione":
             )
         with col3:
             st.markdown("##### Costo")
-            # --- AGGIUNTA ASSEGNAZIONE ---
             limiti['costo_min_euro_g'] = st.number_input(
                 "Costo Min (€/g)",
                 value=int(limiti.get('costo_min_euro_g', 0)),
@@ -337,7 +330,6 @@ elif pagina_selezionata == "Configurazione":
                 disabled=False,
                 key="lim_costo_min"
             )
-            # --- AGGIUNTA ASSEGNAZIONE ---
             limiti['costo_max_euro_g'] = st.number_input(
                 "Costo Max (€/g)",
                 value=int(limiti.get('costo_max_euro_g', 0)),
@@ -346,7 +338,7 @@ elif pagina_selezionata == "Configurazione":
                 key="lim_costo_max"
             )
 
-    # --- Tab 3: Generazione Lotti (ORA CORRETTO) ---
+    # --- Tab 3: Generazione Lotti  ---
     with tab_lotti:
         st.subheader("Parametri Generazione Lotti")
         lotti_params = config_in_editing.get('par_gen_lotti', {})
@@ -358,7 +350,6 @@ elif pagina_selezionata == "Configurazione":
         )
 
         resa_params = lotti_params.get('resa_ettaro', {})
-        # --- AGGIUNTA ASSEGNAZIONE ---
         resa_params['resa_sigma_percent'] = st.number_input(
             "Sigma Resa (%)",
             value=float(resa_params.get('resa_sigma_percent', 0.0)),
@@ -380,15 +371,13 @@ elif pagina_selezionata == "Configurazione":
             for i, prod in enumerate(prodotti):
                 with cols[i]:
                     st.markdown(f"**{prod}**")
-                    # --- AGGIUNTA ASSEGNAZIONE ---
-                    superfici[prod] = st.number_input(
+                            superfici[prod] = st.number_input(
                         f"Superficie (ha)",
                         value=float(superfici.get(prod, 0)),
                         disabled=False,
                         key=f"lotti_sup_{prod}"
                     )
-                    # --- AGGIUNTA ASSEGNAZIONE ---
-                    rese[prod] = st.number_input(
+                            rese[prod] = st.number_input(
                         f"Resa (q/ha) Media",
                         value=float(rese.get(prod, 0)),
                         disabled=False,
@@ -397,13 +386,12 @@ elif pagina_selezionata == "Configurazione":
         else:
             st.warning("Nessun prodotto definito in 'par_gen_lotti.resa_ettaro'.")
 
-    # --- Tab 4: Parametri Varianza (ORA CORRETTO) ---
+    # --- Tab 4: Parametri Varianza  ---
     with tab_var:
         st.subheader("Parametri Varianza (Monte Carlo)")
         var_params = config_in_editing.get('var_params', {})
         col1, col2, col3 = st.columns(3)
         with col1:
-            # --- AGGIUNTA ASSEGNAZIONE ---
             var_params['capacita_sigma_percent'] = st.number_input(
                 "Sigma Capacità (%)",
                 value=float(var_params.get('capacita_sigma_percent', 0.0)),
@@ -411,10 +399,9 @@ elif pagina_selezionata == "Configurazione":
                 disabled=False,
                 min_value=0.0,
                 max_value=1.0,
-                key="var_cap_sigma"  # Aggiunta key per sicurezza
+                key="var_cap_sigma"
             )
         with col2:
-            # --- AGGIUNTA ASSEGNAZIONE ---
             var_params['costo_sigma_percent'] = st.number_input(
                 "Sigma Costo (%)",
                 value=float(var_params.get('costo_sigma_percent', 0.0)),
@@ -422,10 +409,9 @@ elif pagina_selezionata == "Configurazione":
                 disabled=False,
                 min_value=0.0,
                 max_value=1.0,
-                key="var_costo_sigma"  # Aggiunta key
+                key="var_costo_sigma"
             )
         with col3:
-            # --- AGGIUNTA ASSEGNAZIONE ---
             var_params['scarto_sigma_percent'] = st.number_input(
                 "Sigma Scarto (%)",
                 value=float(var_params.get('scarto_sigma_percent', 0.0)),
@@ -433,10 +419,10 @@ elif pagina_selezionata == "Configurazione":
                 disabled=False,
                 min_value=0.0,
                 max_value=1.0,
-                key="var_scarto_sigma"  # Aggiunta key
+                key="var_scarto_sigma"
             )
 
-    # --- Tab 5: Scenari (ORA CORRETTO) ---
+    # --- Tab 5: Scenari  ---
     with tab_scenari:
         st.subheader("Definizione Scenari")
         scenari = config_in_editing.get('scenari', {})
@@ -454,12 +440,11 @@ elif pagina_selezionata == "Configurazione":
 
                     if prodotti_scenario:
                         cols_prod = st.columns(len(prodotti_scenario))
-                        # NOTA: Usiamo 'enumerate' per accedere a prod_info per indice
+                        # 'enumerate' per accedere a prod_info per indice
                         for j, prod_info in enumerate(prodotti_scenario):
                             with cols_prod[j]:
                                 nome_prod = prod_info.get('nome', 'N/D')
-                                # --- AGGIUNTA ASSEGNAZIONE ---
-                                # Modifichiamo direttamente l'elemento nella lista
+                                 # Modifichiamo direttamente l'elemento nella lista
                                 prodotti_scenario[j]['prezzo_kg'] = st.number_input(
                                     f"Prezzo (€/kg) - {nome_prod}",
                                     value=float(prod_info.get('prezzo_kg', 0)),
@@ -474,58 +459,52 @@ elif pagina_selezionata == "Configurazione":
                     with col_man:
                         st.markdown("**Manuale**")
                         man = scenario.get('manuale', {})
-                        # --- AGGIUNTA ASSEGNAZIONE ---
-                        man['cap_q_gg'] = st.number_input(
+                                    man['cap_q_gg'] = st.number_input(
                             f"Capacità (q/gg)",
                             value=float(man.get('cap_q_gg', 0)),
                             disabled=False,
                             key=f"vis_{nome_scenario}_man_cap"
                         )
-                        # --- AGGIUNTA ASSEGNAZIONE ---
-                        man['costo_euro_gg'] = st.number_input(
+                                    man['costo_euro_gg'] = st.number_input(
                             f"Costo (€/gg)",
                             value=float(man.get('costo_euro_gg', 0)),
                             format="%.0f",
                             disabled=False,
                             key=f"vis_{nome_scenario}_man_costo"
                         )
-                        # --- AGGIUNTA ASSEGNAZIONE ---
-                        man['scarto_perc'] = st.number_input(
+                                    man['scarto_perc'] = st.number_input(
                             f"Scarto (%)",
                             value=float(man.get('scarto_perc', 0)),
                             format="%.2f",
                             disabled=False,
                             key=f"vis_{nome_scenario}_man_scarto",
-                            min_value=0.0,  # Aggiunto controllo
-                            max_value=1.0  # Aggiunto controllo
+                            min_value=0.0, 
+                            max_value=1.0 
                         )
                     with col_mec:
                         st.markdown("**Meccanica**")
                         mec = scenario.get('meccanica', {})
-                        # --- AGGIUNTA ASSEGNAZIONE ---
-                        mec['cap_q_gg'] = st.number_input(
+                                    mec['cap_q_gg'] = st.number_input(
                             f"Capacità (q/gg)",
                             value=float(mec.get('cap_q_gg', 0)),
                             disabled=False,
                             key=f"vis_{nome_scenario}_mec_cap"
                         )
-                        # --- AGGIUNTA ASSEGNAZIONE ---
-                        mec['costo_euro_gg'] = st.number_input(
+                                    mec['costo_euro_gg'] = st.number_input(
                             f"Costo (€/gg)",
                             value=float(mec.get('costo_euro_gg', 0)),
                             format="%.0f",
                             disabled=False,
                             key=f"vis_{nome_scenario}_mec_costo"
                         )
-                        # --- AGGIUNTA ASSEGNAZIONE ---
-                        mec['scarto_perc'] = st.number_input(
+                                    mec['scarto_perc'] = st.number_input(
                             f"Scarto (%)",
                             value=float(mec.get('scarto_perc', 0)),
                             format="%.2f",
                             disabled=False,
                             key=f"vis_{nome_scenario}_mec_scarto",
-                            min_value=0.0,  # Aggiunto controllo
-                            max_value=1.0  # Aggiunto controllo
+                            min_value=0.0, 
+                            max_value=1.0 
                         )
 
     st.divider()
@@ -533,27 +512,26 @@ elif pagina_selezionata == "Configurazione":
     # --- LOGICA DI SALVATAGGIO CON CONTROLLO MODIFICHE ---
     if st.button("Salva Modifiche su `config.json`", type="primary"):
 
-        # 1. Prendi il dizionario modificato "dopo" da session_state
+        # Get dizionario modificato "dopo" da session_state
         edited_config = st.session_state.config_editor_state
 
-        # 2. CONFRONTA lo stato "dopo" (edited_config) con lo stato "prima" (config_da_modificare)
+        # Confronta lo stato "dopo" (edited_config) con lo stato "prima" (config_da_modificare)
         if edited_config == config_da_modificare:
             st.warning("Nessuna modifica rilevata. Salvataggio non necessario.")
         else:
             # Se ci sono modifiche, procedi con salvataggio e validazione
             try:
-                # 3. Validazione Logica
                 config_validata = copy.deepcopy(edited_config)
                 if 'global_settings' in config_validata and 'kg_per_q' in config_validata['global_settings']:
                     config_validata['kg_per_q'] = config_validata['global_settings']['kg_per_q']
 
                 app.simulazione.validate_config(config_validata)
 
-                # 4. Salvataggio su disco
+                #Salvataggio su disco
                 with open('config.json', 'w', encoding='utf-8') as f:
                     json.dump(edited_config, f, indent=2, ensure_ascii=False)
 
-                # 5. Pulizia Cache e Ricarica
+                #Pulizia Cache e Ricarica
                 st.cache_data.clear()
                 del st.session_state.config_editor_state
 
@@ -564,7 +542,6 @@ elif pagina_selezionata == "Configurazione":
                 if 'whatif_results' in st.session_state:
                     del st.session_state.whatif_results
 
-                # Questo è il messaggio di conferma che volevi
                 st.session_state.show_save_confirmation = True
                 st.rerun()
 

@@ -39,7 +39,7 @@ def run_montecarlo(config: dict, n_iter: int) -> pd.DataFrame:
     var_params = config['var_params']
     global_params = config
 
-    # Imposta il seed una sola volta all'inizio
+    # Imposta il seed una sola volta
     simulazione.set_seed(config)
 
     for i in range(n_iter):
@@ -53,7 +53,6 @@ def run_montecarlo(config: dict, n_iter: int) -> pd.DataFrame:
 
             # Itera sulle sequenze
             for seq_chiave in ['manuale', 'meccanica']:
-                # Esegui la simulazione singola
                 kpi = simulazione.run_single_simulation(
                     generated_lots=lotti_generati,
                     config_scenario=config_scenario,
