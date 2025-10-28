@@ -21,13 +21,13 @@ Il progetto adotta un'architettura disaccoppiata che separa l'interfaccia utente
     * Contiene scenari (Pessimistico, Reale, Ottimistico), parametri di processo (costi, capacità, scarti), variabili stocastiche (sigma) e impostazioni globali.
     * Il simulatore è **data-driven**: modificando questo file, si modifica l'intero comportamento della simulazione senza toccare il codice.
 
-* 🖥️ **`streamline_app.py` (View)**
+* 🖥️ **`streamlit_app.py` (View)**
     * È l'entry-point dell'applicazione web e gestisce l'interfaccia utente.
     * Controlla la navigazione tra le pagine, gestisce i widget (slider, bottoni, tabelle) e lo stato della sessione (`st.session_state`).
     * Delega tutte le operazioni di calcolo al modulo `app.py`.
 
 * 🖇️ **`app.py` (Controller)**
-    * Serve da ponte tra l'interfaccia (`streamline_app.py`) e il motore di calcolo (`simulazione.py`).
+    * Serve da ponte tra l'interfaccia (`streamlit_app.py`) e il motore di calcolo (`simulazione.py`).
     * Contiene le funzioni principali chiamate dall'interfaccia:
         * `carica_config()`: Carica e valida il JSON.
         * `run_montecarlo()`: Esegue il loop principale della simulazione per N iterazioni.
@@ -45,7 +45,7 @@ Il progetto adotta un'architettura disaccoppiata che separa l'interfaccia utente
 
 ## 3. Funzionalità Principali
 
-L'applicazione web (`streamline_app.py`) è suddivisa in tre sezioni funzionali:
+L'applicazione web (`streamlit_app.py`) è suddivisa in tre sezioni funzionali:
 
 ### 1. Confronto Scenari
 * Esegue la simulazione Monte Carlo completa sui 3 scenari predefiniti (`Pessimistico`, `Reale`, `Ottimistico`) presenti nel `config.json`.
@@ -90,7 +90,7 @@ L'applicazione può essere eseguita in due modalità:
 
 1.  **Con Interfaccia Grafica (Streamlit)**:
     ```bash
-    streamlit run streamline_app.py
+    streamlit run streamlit_app.py
     ```
     Aprire il browser all'indirizzo `http://localhost:8501`.
 
