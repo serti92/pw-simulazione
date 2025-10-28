@@ -8,6 +8,8 @@ L'applicazione utilizza una **simulazione Monte Carlo** per modellare l'incertez
 
 L'interfaccia utente è costruita con **Streamlit**, rendendo l'analisi complessa accessibile tramite un'applicazione web interattiva.
 
+Link pubblicazione app web: https://pw-simulazione.streamlit.app/
+
 ---
 
 ## 2. Architettura del Software
