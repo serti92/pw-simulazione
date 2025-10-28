@@ -7,7 +7,7 @@
   },
   "validaz_limiti": {
     "scarto_min": 0.0,
-    "scarto_max": 0.20,
+    "scarto_max": 0.2,
     "capacita_min_q_g": 10,
     "capacita_max_q_g": 1000,
     "costo_min_euro_g": 50,
@@ -17,72 +17,99 @@
     "modalita": "resa_ettaro",
     "resa_ettaro": {
       "superficie_ha": {
-        "Sangiovese": 6,
-        "Trebbiano": 4,
-        "Merlot": 3
+        "Sangiovese": 6.0,
+        "Trebbiano": 4.0,
+        "Merlot": 3.0
       },
       "resa_q_ha_media": {
-        "Sangiovese": 85,
-        "Trebbiano": 78,
-        "Merlot": 82
+        "Sangiovese": 85.0,
+        "Trebbiano": 78.0,
+        "Merlot": 82.0
       },
-      "resa_sigma_percent": 0.10
+      "resa_sigma_percent": 0.1
     }
   },
   "var_params": {
     "capacita_sigma_percent": 0.05,
     "costo_sigma_percent": 0.05,
-    "scarto_sigma_percent": 0.10
+    "scarto_sigma_percent": 0.1
   },
   "scenari": {
     "Pessimistico": {
       "prodotti": [
-        { "nome": "Sangiovese", "prezzo_kg": 0.80 },
-        { "nome": "Trebbiano", "prezzo_kg": 0.60 },
-        { "nome": "Merlot", "prezzo_kg": 0.70 }
+        {
+          "nome": "Sangiovese",
+          "prezzo_kg": 0.8
+        },
+        {
+          "nome": "Trebbiano",
+          "prezzo_kg": 0.6
+        },
+        {
+          "nome": "Merlot",
+          "prezzo_kg": 0.7
+        }
       ],
       "manuale": {
-        "cap_q_gg": 90,
-        "costo_euro_gg": 600,
+        "cap_q_gg": 90.0,
+        "costo_euro_gg": 600.0,
         "scarto_perc": 0.03
       },
       "meccanica": {
-        "cap_q_gg": 250,
-        "costo_euro_gg": 700,
+        "cap_q_gg": 250.0,
+        "costo_euro_gg": 700.0,
         "scarto_perc": 0.05
       }
     },
     "Reale": {
       "prodotti": [
-        { "nome": "Sangiovese", "prezzo_kg": 1.10 },
-        { "nome": "Trebbiano", "prezzo_kg": 0.80 },
-        { "nome": "Merlot", "prezzo_kg": 0.90 }
+        {
+          "nome": "Sangiovese",
+          "prezzo_kg": 1.1
+        },
+        {
+          "nome": "Trebbiano",
+          "prezzo_kg": 0.8
+        },
+        {
+          "nome": "Merlot",
+          "prezzo_kg": 0.9
+        }
       ],
       "manuale": {
-        "cap_q_gg": 100,
-        "costo_euro_gg": 550,
+        "cap_q_gg": 100.0,
+        "costo_euro_gg": 550.0,
         "scarto_perc": 0.02
       },
       "meccanica": {
-        "cap_q_gg": 280,
-        "costo_euro_gg": 600,
+        "cap_q_gg": 280.0,
+        "costo_euro_gg": 600.0,
         "scarto_perc": 0.045
       }
     },
     "Ottimistico": {
       "prodotti": [
-        { "nome": "Sangiovese", "prezzo_kg": 1.30 },
-        { "nome": "Trebbiano", "prezzo_kg": 1.00 },
-        { "nome": "Merlot", "prezzo_kg": 1.10 }
+        {
+          "nome": "Sangiovese",
+          "prezzo_kg": 1.3
+        },
+        {
+          "nome": "Trebbiano",
+          "prezzo_kg": 1.0
+        },
+        {
+          "nome": "Merlot",
+          "prezzo_kg": 1.1
+        }
       ],
       "manuale": {
-        "cap_q_gg": 110,
-        "costo_euro_gg": 500,
+        "cap_q_gg": 110.0,
+        "costo_euro_gg": 500.0,
         "scarto_perc": 0.015
       },
       "meccanica": {
-        "cap_q_gg": 300,
-        "costo_euro_gg": 580,
+        "cap_q_gg": 300.0,
+        "costo_euro_gg": 580.0,
         "scarto_perc": 0.04
       }
     }

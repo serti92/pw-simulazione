@@ -91,7 +91,8 @@ def analizza_risultati(df_risultati: pd.DataFrame) -> (pd.DataFrame, pd.DataFram
         profitto_p05=('profitto_netto', lambda x: np.percentile(x, 5)),
         profitto_p95=('profitto_netto', lambda x: np.percentile(x, 95)),
         costo_media=('costo_tot', 'mean'),
-        giorni_media=('giorni_arr', 'mean')
+        giorni_media=('giorni_arr', 'mean'),
+        qt_netta_media=('qt_netta_q', 'mean')
     ).reset_index()
 
     pd.options.display.float_format = '{:,.2f}'.format
@@ -105,7 +106,8 @@ def analizza_risultati(df_risultati: pd.DataFrame) -> (pd.DataFrame, pd.DataFram
         'profitto_p05': 'Profitto 5° Perc. (€)',
         'profitto_p95': 'Profitto 95° Perc. (€)',
         'costo_media': 'Costo Medio (€)',
-        'giorni_media': 'Giorni Medi (arr.)'
+        'giorni_media': 'Giorni Medi (arr.)',
+        'qt_netta_media': 'Quantità netta media'
     })
 
     print(summary_print.to_string(index=False))
