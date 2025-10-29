@@ -35,7 +35,7 @@ def run_montecarlo(config: dict, n_iter: int) -> pd.DataFrame:
     # Lista per conservare tutti i risultati
     risultati = []
 
-    # Estraiamo i parametri globali che ci servono
+    # Estrae i parametri globali necessari
     var_params = config['var_params']
     global_params = config
 
@@ -48,7 +48,7 @@ def run_montecarlo(config: dict, n_iter: int) -> pd.DataFrame:
 
         lotti_generati = simulazione.gen_random_lotti(config)
 
-        # Itera su ogni scenario (Pessimistico, Reale, Ottimistico)
+        # Itera su ogni scenario
         for nome_scenario, config_scenario in config['scenari'].items():
 
             # Itera sulle sequenze
@@ -114,7 +114,7 @@ def analizza_risultati(df_risultati: pd.DataFrame) -> (pd.DataFrame, pd.DataFram
     return summary, summary_print
 
 def salva_risultati(df_risultati: pd.DataFrame, summary_print_df: pd.DataFrame, cartella_output: str) -> tuple[str, str]:
-    """Salva sia i risultati grezzi che il sommario, restituendo i percorsi dei file."""
+    """Salva sia i risultati grezzi che il summary, restituendo i percorsi dei file."""
     print(f"\nSalvataggio risultati in '{cartella_output}'...")
     os.makedirs(cartella_output, exist_ok=True)
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")

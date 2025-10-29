@@ -21,7 +21,6 @@ st.markdown('''Strumento di supporto decisionale per l'analisi di scenario e ris
 # Carica la configurazione usando la cache di Streamlit per efficienza
 @st.cache_data
 def cached_load_config():
-    # Funzione per messa in cache risultato
     return app.carica_config()
 
 
@@ -75,7 +74,7 @@ if pagina_selezionata == "Confronto Scenari":
     if 'confronto_df_summary' in st.session_state and st.session_state.confronto_df_summary is not None:
         st.subheader("Risultati Aggregati (Statistiche)")
 
-        # Mostra i risultati nell'interfaccia (senza formattazione come richiesto)
+        # Mostra i risultati nell'interfaccia
         st.dataframe(
             st.session_state.confronto_df_summary,
             hide_index=True,
@@ -126,7 +125,7 @@ elif pagina_selezionata == "Simulatore What-If":
     )
     if 'whatif_scenario_corrente' not in st.session_state or st.session_state.whatif_scenario_corrente != scenario_base_nome:
 
-        #Cancella i valori vecchi dei widget dallo stato della sessione per evitare che ci siano disallineamento con JSON
+        #Cancella i valori vecchi dei widget dallo stato della sessione per evitare che ci siano disallineamenti con JSON
         for key in list(st.session_state.keys()):
             if key.startswith("whatif_"):
                 del st.session_state[key]
@@ -226,11 +225,11 @@ elif pagina_selezionata == "Simulatore What-If":
 # Pagina 3: Configurazione ---
 elif pagina_selezionata == "Configurazione":
 
-    #Mostrare toast salvataggio JSON dopo riavvio
+    #Mostra toast salvataggio JSON dopo riavvio
     if "show_save_confirmation" in st.session_state:
         if st.session_state.show_save_confirmation:
             st.toast("Configurazione salvata e validata!", icon="✅")
-        # Pulisci il flag per non mostrarlo di nuovo
+        # Pulisce il flag per non mostrare di nuovo notifica
         del st.session_state.show_save_confirmation
 
     st.header("⚙️ Editor Configurazione")
@@ -520,17 +519,17 @@ elif pagina_selezionata == "Configurazione":
 
     st.divider()
 
-    # --- LOGICA DI SALVATAGGIO CON CONTROLLO MODIFICHE ---
+    # --- LOGICA DI SALVATAGGIO ---
     if st.button("Salva Modifiche su `config.json`", type="primary"):
 
         # Get dizionario modificato "dopo" da session_state
         edited_config = st.session_state.config_editor_state
 
-        # Confronta lo stato "dopo" (edited_config) con lo stato "prima" (config_da_modificare)
+        # Confronta lo stato post modifiche (edited_config) con lo stato pre modifiche (config_da_modificare)
         if edited_config == config_da_modificare:
             st.warning("Nessuna modifica rilevata. Salvataggio non necessario.")
         else:
-            # Se ci sono modifiche, procedi con salvataggio e validazione
+            #  Procede con salvataggio e validazione se presenti modifiche
             try:
                 config_validata = copy.deepcopy(edited_config)
                 if 'global_settings' in config_validata and 'kg_per_q' in config_validata['global_settings']:
@@ -542,7 +541,7 @@ elif pagina_selezionata == "Configurazione":
                 with open('config.json', 'w', encoding='utf-8') as f:
                     json.dump(edited_config, f, indent=2, ensure_ascii=False)
 
-                #Pulizia Cache e Ricarica
+                #Pulizia cache e ricarica
                 st.cache_data.clear()
                 del st.session_state.config_editor_state
 

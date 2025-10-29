@@ -65,7 +65,7 @@ def test_seed(config):
     """Test 1: Verifica che il seed garantisca la riproducibilità."""
     print("\n[Test 1] Validazione: Determinismo (Riproducibilità Seed)...")
 
-    # Chiama la funzione corretta dal nostro file
+    # Chiama la funzione corretta dal file
     simulazione.set_seed(config)
     lotti_run1 = simulazione.gen_random_lotti(config)
 
@@ -84,7 +84,7 @@ def test_seed(config):
 
 
 def test_simulazione_base(lotti_generati, config):
-    """Test 2: Esegue e stampa i risultati base (con variabilità a zero)."""
+    """Test 2: Esegue e stampa i risultati base con variabilità a zero."""
     print("\n[Test 2] Esecuzione Base (Manuale)...")
 
     # Chiama la funzione di simulazione con i nomi giusti
@@ -116,9 +116,9 @@ def test_sensitivita_costo(lotti_generati, config, profitto_base):
     # Crea una copia del config per evitare di modificare l'originale
     config_test = copy.deepcopy(config)
 
-    # Modifica (aumenta) il costo usando le chiavi giuste
+    # Raddoppia il costo
     costo_base = config_test['scenari']['Reale']['manuale']['costo_euro_gg']
-    config_test['scenari']['Reale']['manuale']['costo_euro_gg'] *= 2  # Raddoppia il costo
+    config_test['scenari']['Reale']['manuale']['costo_euro_gg'] *= 2
     print(f"  Costo base: {costo_base}, Costo test: {config_test['scenari']['Reale']['manuale']['costo_euro_gg']}")
 
     kpi_test_costo = simulazione.run_single_simulation(
@@ -143,9 +143,9 @@ def test_monotonia_scarto(lotti_generati, config, profitto_base):
 
     config_test = copy.deepcopy(config)
 
-    # Modifica (aumenta) lo scarto usando le chiavi giuste
+    # Aumenta lo scarto impostando al 50%
     scarto_base = config_test['scenari']['Reale']['manuale']['scarto_perc']
-    config_test['scenari']['Reale']['manuale']['scarto_perc'] = 0.5  # Scarto drastico del 50%
+    config_test['scenari']['Reale']['manuale']['scarto_perc'] = 0.5
     print(f"  Scarto base: {scarto_base}, Scarto test: {config_test['scenari']['Reale']['manuale']['scarto_perc']}")
 
     kpi_test_scarto = simulazione.run_single_simulation(
@@ -156,7 +156,6 @@ def test_monotonia_scarto(lotti_generati, config, profitto_base):
         global_params=config_test
     )
     profitto_alto_scarto = kpi_test_scarto['profitto_netto']
-    # Usa la chiave di output corretta 'qt_netta_q'
     q_netta_alto_scarto = kpi_test_scarto['qt_netta_q']
 
     print(f"  Profitto Base: {profitto_base:.2f} € | Profitto Alto Scarto: {profitto_alto_scarto:.2f} €")
@@ -173,7 +172,7 @@ def test_sensitivita_prezzo(lotti_generati, config, profitto_base):
 
     config_test = copy.deepcopy(config)
 
-    # Aumentiamo il prezzo del primo prodotto (Sangiovese)
+    # Raddoppia il prezzo del primo prodotto
     prezzo_base = config_test['scenari']['Reale']['prodotti'][0]['prezzo_kg']
     config_test['scenari']['Reale']['prodotti'][0]['prezzo_kg'] *= 2
     print(
@@ -209,7 +208,7 @@ def test_zero_lotti(config):
         global_params=config
     )
 
-    # Verifichiamo che i KPI principali siano 0
+    # Verifica che i KPI principali siano 0
     if kpi_zero['profitto_netto'] == 0 and kpi_zero['costo_tot'] == 0 and kpi_zero['giorni_arr'] == 0:
         print("[PASS] Con lotti a zero, tutti i KPI principali sono 0.")
     else:
@@ -221,14 +220,14 @@ def test_val_errori(config):
     print("\n[Test 7] Validazione: Rilevamento Errori Config...")
 
     test_superati = 0
-    num_test = 3  # Numero di sotto-test che faremo
+    num_test = 3  # Numero di sotto-test
 
     # Test 7.1: Prezzo negativo
     try:
         config_test = copy.deepcopy(config)
         config_test['scenari']['Reale']['prodotti'][0]['prezzo_kg'] = -10
         simulazione.validate_config(config_test)
-        # Se arriviamo qui, il test è fallito perché non ha sollevato l'errore
+        # Se arriva qui, il test è fallito perché non ha sollevato l'errore
         print("[FAIL] validate_config non ha bloccato un prezzo negativo.")
     except ValueError as e:
         print("[PASS] validate_config ha bloccato correttamente un prezzo negativo.")
@@ -286,7 +285,7 @@ def main():
 
     # Blocco per catturare errori di validazione
     try:
-        # Per prima cosa, testiamo che la validazione funzioni
+        # Test che la validazione funzioni
         print("\n[Test 0] Validazione Configurazione Iniziale...")
         simulazione.validate_config(CONFIG_JSON)
         print("[PASS] La configurazione JSON è stata validata.")
@@ -294,7 +293,7 @@ def main():
         print(f"[FAIL] Validazione fallita: {e}")
         return  # Esce se la config base non è valida
 
-    # Test: Testiamo che la validazione blocchi i dati errati
+    # Test che la validazione blocchi i dati errati
     if not test_val_errori(CONFIG_JSON):
         print("\nTest falliti (Validazione Errori). Uscita.")
         return

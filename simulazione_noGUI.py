@@ -1,4 +1,4 @@
-# Esegue la simulazione da riga di comando (senza interfaccia grafica)
+# Esegue la simulazione da riga di comando
 import app
 
 if __name__ == "__main__":

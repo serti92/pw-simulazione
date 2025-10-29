@@ -17,7 +17,7 @@ def validate_config(config: dict):
     if kg_per_q <= 0:
         raise ValueError(f"Il parametro 'kg_per_q' deve essere positivo, ma è {kg_per_q}.")
 
-    # Itera su tutti gli scenari ('Pessimistico', 'Reale', 'Ottimistico')
+    # Itera su tutti gli scenari
     for scenario_nome, scenario_data in config.get('scenari', {}).items():
         # Controlla i prezzi dei prodotti
         for prodotto in scenario_data.get('prodotti', []):
@@ -56,7 +56,6 @@ def set_seed(config: dict):
 
 def get_random_value(base: float, sigma_percent: float, limiti: tuple = (None, None)) -> float:
     """
-    Applica una variabilità stocastica a un valore base.
     Genera un valore da una distribuzione normale e applica i limiti
     """
     if sigma_percent == 0:
@@ -71,7 +70,7 @@ def get_random_value(base: float, sigma_percent: float, limiti: tuple = (None, N
     if limiti[1] is not None:
         val_random = min(limiti[1], val_random)
 
-    # Non possiamo avere valori negativi per la logica di business
+    # Valore diverso da 0 per la logica di business
     val_random = max(0, val_random)
 
     return val_random
@@ -115,7 +114,7 @@ def run_single_simulation(generated_lots: dict, config_scenario: dict, seq_chiav
     Esegue una singola iterazione della simulazione per una data sequenza (mauale o automatica)
     """
 
-    # Estrai i parametri
+    # Estrae i parametri
     sequence_params = config_scenario[seq_chiave]
     limiti = global_params.get('validaz_limiti', {}) 
     kg_per_q = global_params.get('kg_per_q', 100)
@@ -141,7 +140,7 @@ def run_single_simulation(generated_lots: dict, config_scenario: dict, seq_chiav
     # Calcola tempo totale in giorni
     if cap_random == 0: cap_random = 1  # Evita divisione per zero
     giorni_continui = tot_lot_q / cap_random
-    giorni_arr = math.ceil(giorni_continui)  # Lavoriamo su giorni interi per semplicità di calcolo costi
+    giorni_arr = math.ceil(giorni_continui)  # Lavora su giorni interi per logica di business di calcolo costi
 
     costo_tot = giorni_arr * costo_gg_random
 
@@ -157,7 +156,7 @@ def run_single_simulation(generated_lots: dict, config_scenario: dict, seq_chiav
             qt_lorda_q = generated_lots[nome_prod]
             qt_netta_q = qt_lorda_q * (1 - scarto_random)
 
-            ricavo_prod = qt_netta_q * (prezzo_kg * kg_per_q)  # Converti quintali in kg per determinare il prezzo
+            ricavo_prod = qt_netta_q * (prezzo_kg * kg_per_q)  # Converte quintali in kg per determinare il prezzo
 
             ricavo_tot += ricavo_prod
             qt_netta_tot_q += qt_netta_q
@@ -166,7 +165,7 @@ def run_single_simulation(generated_lots: dict, config_scenario: dict, seq_chiav
     profitto_netto = ricavo_tot - costo_tot
     costo_per_q_netto = costo_tot / qt_netta_tot_q if qt_netta_tot_q > 0 else 0
 
-    # Restituisci tutti i KPI
+    # Restituisce tutti i KPI
     return {
         'giorni_continui': giorni_continui,
         'giorni_arr': giorni_arr,
