@@ -128,4 +128,4 @@ Il progetto richiede le seguenti librerie Python, definite in `requirements.txt`
 
 * **pandas**
 * **numpy** 
-* **streamlit**
+* **streamlit>=1.40.0**
